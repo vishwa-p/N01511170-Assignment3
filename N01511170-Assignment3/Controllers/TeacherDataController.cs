@@ -22,7 +22,8 @@ namespace N01511170_Assignment3.Controllers
         /// </returns>
         /// GET api/TeacherData/ListTeachers
         [HttpGet]
-        public IEnumerable<Teacher> ListTeachers()
+        [Route("api/TeacherData/ListTeachers/{SearchKey?}")]
+        public IEnumerable<Teacher> ListTeachers(string SearchKey = null)
         {
             //Creating an instance of a connection
             MySql.Data.MySqlClient.MySqlConnection Conn = Blog.AccessDatabase();
@@ -34,7 +35,11 @@ namespace N01511170_Assignment3.Controllers
             MySql.Data.MySqlClient.MySqlCommand cmd = Conn.CreateCommand();
 
             //SQL QUERY
-            cmd.CommandText = "Select * from teachers";
+            /*cmd.CommandText = "Select * from teachers";*/
+            cmd.CommandText = "Select * from teachers where lower(teacherfname) like lower(@key) or lower(teacherlname) like lower(@key) or lower(concat(teacherfname, ' ', teacherlname)) like lower(@key)";
+
+            cmd.Parameters.AddWithValue("@key", "%" + SearchKey + "%");
+            cmd.Prepare();
 
             //Collecting Result Set of Query into a variable
             MySql.Data.MySqlClient.MySqlDataReader ResultSet = cmd.ExecuteReader();
@@ -93,7 +98,10 @@ namespace N01511170_Assignment3.Controllers
             MySql.Data.MySqlClient.MySqlCommand cmd = Conn.CreateCommand();
 
             //SQL QUERY
-            cmd.CommandText = "Select * from Teachers where teacherid = " + teacherid;
+            /*cmd.CommandText = "Select * from Teachers where teacherid = " + teacherid;*/
+            cmd.CommandText = "Select * from Teachers where teacherid = @id";
+            cmd.Parameters.AddWithValue("@id", teacherid);
+            cmd.Prepare();
 
             //Collecting Result Set of Query into a variable
             MySql.Data.MySqlClient.MySqlDataReader ResultSet = cmd.ExecuteReader();

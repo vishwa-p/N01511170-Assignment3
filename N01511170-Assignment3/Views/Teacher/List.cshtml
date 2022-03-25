@@ -3,16 +3,19 @@
     ViewBag.Title = "List";
 }
 
-<h2>List</h2>
-
-<p>This Page willl show all information about Teachers.</p>
+<h2>List of Teachers</h2>
 
 <div id="containerlist">
-    <h2>List of Teachers</h2>
+    <h3 style="color:darkslateblue;">You can search teachers by their names as well.</h3>
+    <form action="/Teacher/List" method="GET">
+        <input type="text" name="SearchKey" autocomplete="off" />
+        <input type="submit" value="Search" />
+    </form>
+    <br />
     @foreach (var teacher in Model)
     {
         <div class="listitem row">
-            <div class="col-md-12"><a href="/Teacher/Show/@teacher.TeacherId">@teacher.TeacherFname @teacher.TeacherLname</a></div>
+            <div class="col-md-12"><a href="/Teacher/Show/@teacher.TeacherId" style="color:darkcyan;font-size:30px;font-style:italic;"><b>@teacher.TeacherFname @teacher.TeacherLname</b></a></div>
         </div>
     }
 </div>
