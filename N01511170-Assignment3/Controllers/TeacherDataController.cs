@@ -1,11 +1,9 @@
 ﻿using BlogProject.Models;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
 using System.Web.Http;
 using N01511170_Assignment3.Models;
+using MySql.Data.MySqlClient;
 
 namespace N01511170_Assignment3.Controllers
 {
@@ -82,8 +80,8 @@ namespace N01511170_Assignment3.Controllers
         /// </summary>
         /// <param name="id">The teacher primary key</param>
         /// <returns>An teacher object</returns>
-        [HttpGet]
-        [Route("api/teacherdata/findteacher/{teacherid}")]
+            [HttpGet]
+            [Route("api/teacherdata/findteacher/{teacherid}")]
         public Teacher FindTeacher(int teacherid)
         {
             Teacher NewTeacher = new Teacher();
@@ -97,6 +95,7 @@ namespace N01511170_Assignment3.Controllers
             //Establish a new query for our database
             MySql.Data.MySqlClient.MySqlCommand cmd = Conn.CreateCommand();
 
+          
             //SQL QUERY
             /*cmd.CommandText = "Select * from Teachers where teacherid = " + teacherid;*/
             cmd.CommandText = "Select * from Teachers where teacherid = @id";
@@ -125,6 +124,57 @@ namespace N01511170_Assignment3.Controllers
             }
             return NewTeacher;
         }
+        /// <summary>
+        /// Deletes an teacher from the connected MySQL Database if the ID of that author exists.
+        /// </summary>
+        /// <param name="id">The ID of the teacher.</param>
+        /// <example>POST /api/TeacherrData/Deleteteacher/7</example>
+        [HttpPost]
+        public void DeleteTeacher(int id)
+        {
+            //Create an instance of a connection
+            MySql.Data.MySqlClient.MySqlConnection Conn = Blog.AccessDatabase();
 
+            //Open the connection between the web server and database
+            Conn.Open();
+
+            //Establish a new command (query) for our database
+            MySqlCommand cmd = Conn.CreateCommand();
+
+            //SQL QUERY
+            cmd.CommandText = "DELETE teachers , classes  FROM teachers  INNER JOIN classes WHERE teachers.teacherId = classes.teacherId and teachers.teacherId =@id";
+
+            cmd.Parameters.AddWithValue("@id", id);
+            cmd.Prepare();
+            cmd.ExecuteNonQuery();
+            Conn.Close();
+        }
+
+        [HttpPost]
+        [EnableCors(origins: "*", methods: "*", headers: "*")]
+        public void AddTeacher([FromBody] Teacher NewTeacher)
+        {
+            //Create an instance of a connection
+            MySqlConnection Conn = Blog.AccessDatabase();
+
+            //Open the connection between the web server and database
+            Conn.Open();
+
+            //Establish a new command (query) for our database
+            MySqlCommand cmd = Conn.CreateCommand();
+
+            //SQL QUERY
+            cmd.CommandText = "insert into teachers " +
+                "(teacherfname, teacherlname, employeenumber, hiredate, salary)" +
+                " values (@TeacherFname,@TeacherLname,@TeacherNumber, @TeacherHireDate, @TeacherSalary)";
+            cmd.Parameters.AddWithValue("@TeacherFname", NewTeacher.TeacherFname);
+            cmd.Parameters.AddWithValue("@TeacherLname", NewTeacher.TeacherLname);
+            cmd.Parameters.AddWithValue("@TeacherNumber", NewTeacher.TeacherNumber);
+            cmd.Parameters.AddWithValue("@TeacherHireDate", NewTeacher.TeacherHireDate);
+            cmd.Parameters.AddWithValue("@TeacherSalary", NewTeacher.TeacherSalary);
+            cmd.Prepare();
+            cmd.ExecuteNonQuery();
+            Conn.Close();
+        }
     }
 }

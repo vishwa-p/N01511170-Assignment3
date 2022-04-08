@@ -6,7 +6,10 @@
 <h2>List of Teachers</h2>
 
 <div id="containerlist">
-    <h3 style="color:darkslateblue;">You can search teachers by their names as well.</h3>
+    <nav>
+        <a class="navlink" href="/Teacher/NewTeacher">New Teacher</a>
+    </nav>
+    <h3>You can search teachers by their names as well.</h3>
     <form action="/Teacher/List" method="GET">
         <input type="text" name="SearchKey" autocomplete="off" />
         <input type="submit" value="Search" />
@@ -15,7 +18,7 @@
     @foreach (var teacher in Model)
     {
         <div class="listitem row">
-            <div class="col-md-12"><a href="/Teacher/Show/@teacher.TeacherId" style="color:darkcyan;font-size:30px;font-style:italic;"><b>@teacher.TeacherFname @teacher.TeacherLname</b></a></div>
+            <div class="col-md-12"><a href="/Teacher/Show/@teacher.TeacherId"><b>@teacher.TeacherFname @teacher.TeacherLname</b></a></div>
         </div>
     }
 </div>

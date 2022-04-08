@@ -4,8 +4,11 @@
 }
 
 <h2>Showing details about a teacher</h2>
-<a class="navlink" href="/Teacher/List">Back To Teachers</a>
-<div id="containershow" style="background-color:burlywood;">
+<div id="containershow">
+    <nav>
+        <a class="navlink" href="/Teacher/List">Back To Teachers</a>
+        <button><a class="dellink" href="/Teacher/DeleteConfirm/@Model.TeacherId">Delete</a></button>
+    </nav>
     <h2><i>@Model.TeacherFname @Model.TeacherLname</i></h2>
     <p><b>TeacherId:</b> @Model.TeacherId</p>
     <p><b>HireDate:</b> @Model.TeacherHireDate</p>

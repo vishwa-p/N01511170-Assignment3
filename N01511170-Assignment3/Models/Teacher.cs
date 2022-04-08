@@ -13,5 +13,7 @@ namespace N01511170_Assignment3.Models
         public string TeacherNumber;
         public DateTime TeacherHireDate;
         public Decimal TeacherSalary;
+
+        public Teacher() { }
     }
 }

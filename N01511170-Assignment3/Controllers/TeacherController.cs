@@ -31,5 +31,45 @@ namespace N01511170_Assignment3.Controllers
             Teacher NewTeacher = controller.FindTeacher(id);
             return View(NewTeacher);
         }
+        //GET : /Author/DeleteConfirm/{id}
+        public ActionResult DeleteConfirm(int id)
+        {
+            TeacherDataController controller = new TeacherDataController();
+            Teacher NewTeacher = controller.FindTeacher(id);
+
+
+            return View(NewTeacher);
+        }
+        //POST : /Author/Delete/{id}
+        [HttpPost]
+        public ActionResult Delete(int id)
+        {
+            TeacherDataController controller = new TeacherDataController();
+            controller.DeleteTeacher(id);
+            return RedirectToAction("List");
+        }
+        //GET : /Author/New
+        public ActionResult NewTeacher()
+        {
+            return View();
+        }
+        //POST : /Teacher/Create
+        [HttpPost]
+        public ActionResult Create(string TeacherFname, string TeacherLname, string TeacherNumber
+            , DateTime TeacherHireDate,decimal TeacherSalary)
+        {
+            
+            Teacher NewTeacher = new Teacher();
+            NewTeacher.TeacherFname = TeacherFname;
+            NewTeacher.TeacherLname = TeacherLname;
+            NewTeacher.TeacherNumber = TeacherNumber;
+            NewTeacher.TeacherHireDate = TeacherHireDate;
+            NewTeacher.TeacherSalary = TeacherSalary;
+
+            TeacherDataController controller = new TeacherDataController();
+            controller.AddTeacher(NewTeacher);
+
+            return RedirectToAction("List");
+        }
     }
 }
