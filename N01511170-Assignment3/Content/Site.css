@@ -18,5 +18,9 @@ textarea {
 }
 button {
     float: right;
+    margin-left: 5px;
+}
+.updatelink{
+    padding-left:200px;
 }
 

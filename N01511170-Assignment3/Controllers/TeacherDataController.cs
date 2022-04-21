@@ -150,6 +150,22 @@ namespace N01511170_Assignment3.Controllers
             Conn.Close();
         }
 
+        /// <summary>
+        /// Updates an teacher on the MySQL Database. Non-Deterministic.
+        /// </summary>
+        /// <param name="teacherInfo">An object with fields that map to the columns of the teacher's table.</param>
+        /// <example>
+        /// POST api/TeacherData/Updateteacher/9
+        /// FORM DATA / POST DATA / REQUEST BODY 
+        /// {
+        ///	"TeacherFname":"Vishwa",
+        ///	"teacherLname":"Patel",
+        ///	"Teachernumber":"T107!",
+        ///	"TeacherHireDate":"2022-01-01"
+        ///	///	"TeacherSalary":"108.89"
+        /// }
+        /// </example>
+
         [HttpPost]
         [EnableCors(origins: "*", methods: "*", headers: "*")]
         public void AddTeacher([FromBody] Teacher NewTeacher)
@@ -175,6 +191,38 @@ namespace N01511170_Assignment3.Controllers
             cmd.Prepare();
             cmd.ExecuteNonQuery();
             Conn.Close();
+        }
+
+        [HttpPost]
+        [EnableCors(origins: "*", methods: "*", headers: "*")]
+        public void UpdateTeacher(int id, [FromBody] Teacher TeacherInfo)
+        {
+            //Create an instance of a connection
+            MySqlConnection Conn = Blog.AccessDatabase();
+
+            //Debug.WriteLine(AuthorInfo.AuthorFname);
+
+            //Open the connection between the web server and database
+            Conn.Open();
+
+            //Establish a new command (query) for our database
+            MySqlCommand cmd = Conn.CreateCommand();
+
+            //SQL QUERY
+            cmd.CommandText = "update teachers set teacherfname=@TeacherFname, teacherlname=@TeacherLname, employeenumber=@TeacherNumber, hiredate=@TeacherHireDate ,salary= @TeacherSalary where teacherid=@TeacherId";
+            cmd.Parameters.AddWithValue("@TeacherFname", TeacherInfo.TeacherFname);
+            cmd.Parameters.AddWithValue("@TeacherLname", TeacherInfo.TeacherLname);
+            cmd.Parameters.AddWithValue("@TeacherNumber", TeacherInfo.TeacherNumber);
+            cmd.Parameters.AddWithValue("@TeacherHireDate", TeacherInfo.TeacherHireDate);
+            cmd.Parameters.AddWithValue("@TeacherSalary", TeacherInfo.TeacherSalary);
+            cmd.Parameters.AddWithValue("@teacherId", id);
+            cmd.Prepare();
+
+            cmd.ExecuteNonQuery();
+
+            Conn.Close();
+
+
         }
     }
 }
